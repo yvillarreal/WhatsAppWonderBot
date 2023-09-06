@@ -1,0 +1,11 @@
+/.idea
+
+/node_modules
+
+my-session.data.json
+
+# managed
+**.data.json
+**.node-persist**
+**_IGNORE_**
+# end managed
