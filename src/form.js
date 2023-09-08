@@ -1,15 +1,42 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const {getClient} = require('./wa');
 const notifier = require('node-notifier');
+const {validateFields, scheduleMessage} = require('./schedule'); // Importa las funciones
 
 const app = express();
-const port = 3000;
 
 app.use(bodyParser.urlencoded({extended: true}));
 
+
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/form.html');
+});
+
+
+app.get('/schedule', (req, res) => {
+    res.sendFile(__dirname + '/schedule.html');
+});
+
+
+app.post('/schedule', async (req, res) => {
+    const {from, to, hour, minutes, date, message} = req.body;
+
+    const result = scheduleMessage(Number(from), Number(to), Number(hour), Number(minutes), new Date(date), message);
+
+    const successMessage = `Mensaje programado a ${to}: ${message}`;
+    showNotification(successMessage, 'Éxito');
+
+    // Limpiar los campos del formulario después de enviar
+    req.body.from = '';
+    req.body.to = '';
+    req.body.hour = '';
+    req.body.minutes = '';
+    req.body.date = '';
+    req.body.message = '';
+
+    res.redirect('/');
 });
 
 
@@ -40,17 +67,12 @@ app.post('/send', async (req, res) => {
     res.redirect('/');
 });
 
+
 function showNotification(message, title) {
     notifier.notify({
         title: title, message: message,
     });
 }
 
-app.listen(port, () => {
-    console.log(`Servidor Express escuchando en el puerto ${port}`);
-});
 
-
-
-// form.js
 module.exports = app;
