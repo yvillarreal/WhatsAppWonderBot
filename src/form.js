@@ -1,9 +1,9 @@
 const express = require('express');
-const path = require('path');
 const bodyParser = require('body-parser');
 const {getClient} = require('./wa');
 const notifier = require('node-notifier');
 const {validateFields, scheduleMessage} = require('./schedule'); // Importa las funciones
+const path = require('path');
 
 const app = express();
 
@@ -11,12 +11,12 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/form.html');
+    res.sendFile('form.html', { root: path.join(__dirname, '..', 'public') });
 });
 
 
 app.get('/schedule', (req, res) => {
-    res.sendFile(__dirname + '/schedule.html');
+    res.sendFile('schedule.html', { root: path.join(__dirname, '..', 'public') });
 });
 
 
@@ -73,6 +73,5 @@ function showNotification(message, title) {
         title: title, message: message,
     });
 }
-
 
 module.exports = app;

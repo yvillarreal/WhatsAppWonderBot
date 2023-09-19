@@ -1,13 +1,6 @@
 const {create, Client} = require('@open-wa/wa-automate');
-const cron = require('node-cron');
-const fs = require('fs');
 
 let clientInstance; // Instancia única de WhatsApp Web
-
-// Cargar números desde el archivo numbers.json
-//const numbersData = fs.readFileSync('utils/numbers.json');
-const numbersData = fs.readFileSync('numbers.json');
-const numbers = JSON.parse(numbersData).numbers;
 
 // Crea una instancia de WhatsApp Web
 const start = async () => {
@@ -16,8 +9,12 @@ const start = async () => {
 
     // Método para recibir mensajes
     await clientInstance.onMessage(async (message) => {
-        if (message.body.toLowerCase() === 'hola') {
-            await clientInstance.sendText(message.from, 'Hola, ¿en qué puedo ayudarte?');
+        const lowerCaseMessage = message.body.toLowerCase();
+
+        if (lowerCaseMessage.includes('hola')) {
+            await clientInstance.sendText(message.from, '¡Hola! ¿En qué puedo ayudarte? 😊');
+        } else if (lowerCaseMessage.includes('adiós')) {
+            await clientInstance.sendText(message.from, 'Adiós. ¡Que tengas un buen día! 👋');
         }
     });
 };

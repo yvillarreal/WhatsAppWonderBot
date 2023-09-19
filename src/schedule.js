@@ -15,14 +15,12 @@ function scheduleMessage(from, to, hour, minutes, date, message) {
 
     const client = getClient();
 
-    //const cronExpression = `${minutes} ${hour} ${date.getDate()} ${date.getMonth() + 1} *`;
     const cronExpression = `${minutes} ${hour} ${date.getDate() + 1} ${date.getMonth() + 1} *`;
 
     cron.schedule(cronExpression, async () => {
         try {
-            // Tu lógica para enviar el mensaje
             await client.sendText(`${to}@c.us`, message);
-            await client.sendText(`${from}@c.us`, `El mensaja enviado al número (${to}: con el siguiente mensaje: ${message}) ha sido enviado exitosamente.`);
+            await client.sendText(`${from}@c.us`, `✅ *Mensaje Programado Enviado Exitosamente* ✅\n\nNúmero Destino: *${to}*\nMensaje: *${message}* 🚀`);
         } catch (error) {
             console.error('Error al enviar el mensaje programado:', error);
         }
