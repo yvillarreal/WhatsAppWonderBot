@@ -1,0 +1,16 @@
+{
+  "contacts": [
+    {
+      "name": "Yamil",
+      "number": "50578661942",
+      "hourToSend": 17,
+      "minuteToSend": 7
+    },
+    {
+      "name": "Amor",
+      "number": "50578661942",
+      "hourToSend": 9,
+      "minuteToSend": 0
+    }
+  ]
+}
