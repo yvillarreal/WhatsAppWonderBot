@@ -1,17 +1,10 @@
-const {create, Client} = require('@open-wa/wa-automate');
-const cron = require('node-cron');
-const fs = require('fs');
+const {getClient} = require('./whatsapp');
+const cron = require("node-cron");
+const {create} = require("@open-wa/wa-automate");
+const data  = require("./database");
 
-let clientInstance; // Instancia única de WhatsApp Web
-
-// Carga los contactos desde el archivo contacts.json
-const contactsData = fs.readFileSync('./data/contacts.json');
-const contacts = JSON.parse(contactsData).contacts;
-
-// Almacena los mensajes programados por los usuarios
 const scheduledMessages = [];
 
-// Método para programar un mensaje
 function scheduleMessage(number, hour, minutes, message) {
     scheduledMessages.push({number, hour, minutes, message});
     // Configura la tarea cron para enviar el mensaje en la hora y minutos especificados
@@ -28,8 +21,8 @@ function scheduleMessage(number, hour, minutes, message) {
     });
 }
 
-// Crea una instancia de WhatsApp Web
-const start = async () => {
+
+const startSchedule = async () => {
     clientInstance = await create({sessionId: 'my-session'});
     console.log('WhatsApp está listo.');
 
@@ -37,7 +30,6 @@ const start = async () => {
     await clientInstance.onMessage(async (message) => {
         const lowerCaseMessage = message.body.toLowerCase();
 
-        // Evita que los mensajes con /programar caigan en los primeros if
         if (lowerCaseMessage.startsWith('/programar')) {
             // Ejemplo de formato esperado: /programar 14:30 1234567890 Hola, este es un mensaje programado
             const commandParts = lowerCaseMessage.split(' ');
@@ -54,6 +46,7 @@ const start = async () => {
                     const minutes = parseInt(timeParts[1]);
 
                     scheduleMessage(number, hour, minutes, userMessage);
+                    data.saveScheduledMessage(hour, minutes, number, userMessage, 'programado');
                     const responseSchedule = `Mensaje programado para las:\n*Hora:* ${time}\n*Mensaje*: ${userMessage}\n*Número a enviar:* ${number}`
                     await clientInstance.sendText(message.from, responseSchedule);
                 } else {
@@ -62,25 +55,6 @@ const start = async () => {
             } else {
                 await clientInstance.sendText(message.from, 'Formato incorrecto. Debe ser: /programar [HH:mm] [numero] [mensaje]');
             }
-        } else if (lowerCaseMessage.includes('hola')) {
-            await clientInstance.sendText(message.from, '¡Hola! ¿En qué puedo ayudarte? 😊');
-            await clientInstance.sendText(message.from, 'Soy un asistente virtual de WhatsApp. 😊\n' +
-                'Estoy aquí para ayudarte con las siguientes funciones:\n\n' +
-                '📋 /comandos - Mostrar esta lista de comandos disponibles.\n' +
-                '📜 /ver_programados - Ver mensajes programados.\n' +
-                '📅 /programar [HH:mm] [numero] [mensaje] - Programar un mensaje.\n\n' +
-                '¡Si tienes alguna pregunta o necesitas ayuda, no dudes en preguntar! 👍');
-
-        } else if (lowerCaseMessage.includes('adiós')) {
-            await clientInstance.sendText(message.from, 'Adiós. ¡Que tengas un buen día! 👋');
-        } else if (lowerCaseMessage.includes('comandos')) {
-            // Responde con la lista de comandos disponibles
-            const commandList = 'Responde con la lista de comandos disponible | Comandos Disponibles:\n' +
-                '📋 /comandos - Mostrar esta lista\n' +
-                '📜 /ver_programados - Ver mensajes programados\n' +
-                '📅 /programar [HH:mm] [505numero] [mensaje] - Programar un mensaje\n';
-
-            await clientInstance.sendText(message.from, commandList);
         } else if (lowerCaseMessage.includes('/ver_programados')) {
             // Mostrar mensajes programados
             if (scheduledMessages.length === 0) {
@@ -91,30 +65,11 @@ const start = async () => {
                 await clientInstance.sendText(message.from, response);
             }
         }
-    });
 
-    // Programa el envío de mensajes a los contactos según la hora especificada
-    cron.schedule('* * * * *', async () => {
-        const now = new Date();
-        let messageToSend = '';
-
-        for (const contact of contacts) {
-            if (contact.hourToSend === now.getHours() && now.getMinutes() === contact.minuteToSend) {
-                // Mensaje personalizado según la hora
-                messageToSend = '¡Buenos días!';
-                if (now.getHours() >= 12 && now.getHours() < 18) {
-                    messageToSend = '¡Buenas tardes!';
-                } else if (now.getHours() >= 18) {
-                    messageToSend = '¡Buenas noches!';
-                }
-
-                await clientInstance.sendText(`${contact.number}@c.us`, `${messageToSend} ${contact.name}, este es un mensaje programado.`);
-            }
-        }
-    });
-};
+    })
+}
 
 
 module.exports = {
-    start, getClient: () => clientInstance, // Exporta la instancia de WhatsApp Web
+    startSchedule
 };

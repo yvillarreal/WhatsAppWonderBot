@@ -15,6 +15,7 @@
     "inputmask": "^5.0.8",
     "materialize-css": "^1.0.0",
     "node-cron": "^3.0.2",
-    "node-notifier": "^10.0.1"
+    "node-notifier": "^10.0.1",
+    "sqlite3": "^5.1.6"
   }
 }
