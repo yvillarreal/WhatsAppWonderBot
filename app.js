@@ -1,11 +1,11 @@
 const app = require('./src/form'); // Importa el objeto app desde form.js
-const { start } = require('./module');
+const {startWhatsApp} = require('./module/whatsapp');
 
-// Iniciar WhatsApp Web
-start();
+// Inicializa WhatsApp
+startWhatsApp();
 
 // Iniciar el servidor Express
 const port = 3001;
 app.listen(port, () => {
-  console.log(`Servidor Express escuchando en el puerto ${port}`);
+    console.log(`Servidor Express escuchando en el puerto ${port}`);
 });

@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const {getClient} = require('../module');
+const {getClient} = require('../module/whatsapp');
 
 // Función para validar los campos del formulario
 function validateFields(from, to, hour, minutes, date) {

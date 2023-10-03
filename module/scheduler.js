@@ -1,37 +1,15 @@
-const {getClient} = require('./whatsapp');
 const cron = require("node-cron");
-const {create} = require("@open-wa/wa-automate");
-const data  = require("./database");
+const data = require("./database");
 
-const scheduledMessages = [];
+const scheduledMessagesList = [];
 
-function scheduleMessage(number, hour, minutes, message) {
-    scheduledMessages.push({number, hour, minutes, message});
-    // Configura la tarea cron para enviar el mensaje en la hora y minutos especificados
-    const cronExpression = `${minutes} ${hour} * * *`;
-    const task = cron.schedule(cronExpression, async () => {
-        await clientInstance.sendText(`${number}@c.us`, message);
-        // Elimina el mensaje programado de la lista una vez que se envía
-        const index = scheduledMessages.findIndex((msg) => msg.number === number && msg.hour === hour && msg.minutes === minutes && msg.message === message);
-        if (index !== -1) {
-            scheduledMessages.splice(index, 1);
-        }
-        // Detiene la tarea cron
-        task.destroy();
-    });
-}
-
-
-const startSchedule = async () => {
-    clientInstance = await create({sessionId: 'my-session'});
-    console.log('WhatsApp está listo.');
+function startSchedule(clientInstance) {
 
     // Método para recibir mensajes
-    await clientInstance.onMessage(async (message) => {
+    clientInstance.onMessage(async (message) => {
         const lowerCaseMessage = message.body.toLowerCase();
 
         if (lowerCaseMessage.startsWith('/programar')) {
-            // Ejemplo de formato esperado: /programar 14:30 1234567890 Hola, este es un mensaje programado
             const commandParts = lowerCaseMessage.split(' ');
 
             if (commandParts.length >= 4) {
@@ -45,7 +23,7 @@ const startSchedule = async () => {
                     const hour = parseInt(timeParts[0]);
                     const minutes = parseInt(timeParts[1]);
 
-                    scheduleMessage(number, hour, minutes, userMessage);
+                    scheduleMessage(clientInstance, number, hour, minutes, userMessage);
                     data.saveScheduledMessage(hour, minutes, number, userMessage, 'programado');
                     const responseSchedule = `Mensaje programado para las:\n*Hora:* ${time}\n*Mensaje*: ${userMessage}\n*Número a enviar:* ${number}`
                     await clientInstance.sendText(message.from, responseSchedule);
@@ -57,19 +35,40 @@ const startSchedule = async () => {
             }
         } else if (lowerCaseMessage.includes('/ver_programados')) {
             // Mostrar mensajes programados
-            if (scheduledMessages.length === 0) {
+            if (scheduledMessagesList.length === 0) {
                 await clientInstance.sendText(message.from, 'No hay mensajes programados. 😔');
             } else {
-                const scheduledMessageList = scheduledMessages.map((msg) => `*Hora:* ${msg.hour}:${msg.minutes}\n*Mensaje*: ${msg.message}\n*Número a enviar:* ${msg.number}\n|===============================|`);
+                const scheduledMessageList = scheduledMessagesList.map((msg) => `*Hora:* ${msg.hour}:${msg.minutes}\n*Mensaje*: ${msg.message}\n*Número a enviar:* ${msg.number}\n|===============================|`);
                 const response = `*_Mensajes Programados:_*\n${scheduledMessageList.join('\n')}`;
                 await clientInstance.sendText(message.from, response);
             }
         }
+    });
+}
 
-    })
+
+function scheduleMessage(clientInstance, number, hour, minutes, message) {
+    scheduledMessagesList.push({number, hour, minutes, message});
+    // Configura la tarea cron para enviar el mensaje en la hora y minutos especificados
+    const cronExpression = `${minutes} ${hour} * * *`;
+    const task = cron.schedule(cronExpression, async () => {
+        await clientInstance.sendText(`${number}@c.us`, message);
+        // Elimina el mensaje programado de la lista una vez que se envía
+        const index = scheduledMessagesList.findIndex((msg) =>
+            msg.number === number &&
+            msg.hour === hour &&
+            msg.minutes === minutes &&
+            msg.message === message);
+        if (index !== -1) {
+            scheduledMessagesList.splice(index, 1);
+        }
+        // Detiene la tarea cron
+        task.destroy();
+    });
 }
 
 
 module.exports = {
-    startSchedule
+    startSchedule,
+    scheduleMessage
 };

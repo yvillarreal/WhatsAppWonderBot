@@ -1,9 +1,6 @@
-const {getClient} = require('./whatsapp');
+function handleCommands(clientInstance) {
 
-function handleCommands() {
-    const clientCommand = getClient(); // ToDO: VERIFICA PORQUE NO ESTA PASANDO EL CLIENTE DE WP WEB
-
-    clientCommand.onMessage(async (message) => {
+    clientInstance.onMessage(async (message) => {
         const lowerCaseMessage = message.body.toLowerCase();
 
         if (lowerCaseMessage.includes('/comandos')) {
@@ -13,7 +10,7 @@ function handleCommands() {
                 '📜 /ver_programados - Ver mensajes programados.\n' +
                 '📅 /programar [HH:mm] [numero] [mensaje] - Programar un mensaje.\n';
 
-            await clientCommand.sendText(message.from, commandList);
+            await clientInstance.sendText(message.from, commandList);
         }
     });
 }

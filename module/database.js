@@ -1,6 +1,5 @@
 const db = require('../data/initialize_database');
 
-
 function saveScheduledMessage(hour, minutes, number, message, status) {
     const insertQuery = `INSERT INTO scheduled_messages (hour, minutes, number, message, status)
                          VALUES (?, ?, ?, ?, ?)`;
