@@ -3,7 +3,7 @@ const data = require("./database");
 
 const scheduledMessagesList = [];
 
-function startSchedule(clientInstance) {
+function scheduler(clientInstance) {
 
     // Método para recibir mensajes
     clientInstance.onMessage(async (message) => {
@@ -54,11 +54,7 @@ function scheduleMessage(clientInstance, number, hour, minutes, message) {
     const task = cron.schedule(cronExpression, async () => {
         await clientInstance.sendText(`${number}@c.us`, message);
         // Elimina el mensaje programado de la lista una vez que se envía
-        const index = scheduledMessagesList.findIndex((msg) =>
-            msg.number === number &&
-            msg.hour === hour &&
-            msg.minutes === minutes &&
-            msg.message === message);
+        const index = scheduledMessagesList.findIndex((msg) => msg.number === number && msg.hour === hour && msg.minutes === minutes && msg.message === message);
         if (index !== -1) {
             scheduledMessagesList.splice(index, 1);
         }
@@ -68,7 +64,4 @@ function scheduleMessage(clientInstance, number, hour, minutes, message) {
 }
 
 
-module.exports = {
-    startSchedule,
-    scheduleMessage
-};
+module.exports = {scheduler};

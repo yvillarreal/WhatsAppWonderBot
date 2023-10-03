@@ -1,6 +1,6 @@
 const {create, Client} = require('@open-wa/wa-automate');
 const {handleCommands} = require('./commands');
-const {scheduleMessage} = require('./scheduler');
+const {scheduler} = require('./scheduler');
 const {loadContacts} = require('./contacts');
 
 let clientInstance;
@@ -11,7 +11,8 @@ async function startWhatsApp() {
     loadContacts(clientInstance);
     console.log("Cargando módulo de comandos.")
     handleCommands(clientInstance);
-    scheduleMessage(clientInstance);
+    console.log("Cargando módulo de scheduler.")
+    scheduler(clientInstance);
     console.log('🚀 WhatsAppWonderBot está listo. 🚀');
 }
 
