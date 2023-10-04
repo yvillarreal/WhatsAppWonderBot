@@ -11,7 +11,8 @@ const db = new sqlite3.Database('./data/messages.db', (err) => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       hour INTEGER,
       minutes INTEGER,
-      number TEXT,
+      number_to TEXT,
+      number_from TEXT,
       message TEXT,
       status TEXT
     )`);
