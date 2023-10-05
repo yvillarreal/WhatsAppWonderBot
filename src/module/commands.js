@@ -8,7 +8,7 @@ function handleCommands(clientInstance) {
             const commandList = 'Comandos Disponibles:\n' +
                 '📋 /comandos - Mostrar esta lista de comandos disponibles.\n' +
                 '📜 /ver_programados - Ver mensajes programados.\n' +
-                '📅 /programar [HH:mm] [numero] [mensaje] - Programar un mensaje.\n';
+                '📅 /programar [frecuencia: daily,weekly] [HH:mm] [dd-MM-yyyy] [numero] [mensaje] - Programar un mensaje.\n\n*Ejemplo:*\n/programar daily 13:45 05-12-2023 505XXXXXX Hola soy un mensaje :)';
 
             await clientInstance.sendText(message.from, commandList);
         }

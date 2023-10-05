@@ -1,4 +1,4 @@
-const app = require('./src/form'); // Importa el objeto app desde form.js
+const app = require('./form'); // Importa el objeto app desde form.js
 const {startWhatsApp} = require('./module/whatsapp');
 
 // Inicializa WhatsApp

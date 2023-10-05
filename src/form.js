@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const {getClient} = require('../module/whatsapp');
+const {getClient} = require('./module/whatsapp');
 const notifier = require('node-notifier');
 const {validateFields, scheduleMessage} = require('./schedule'); // Importa las funciones
 const path = require('path');
