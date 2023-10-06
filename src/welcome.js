@@ -1,4 +1,3 @@
-/*
 const express = require('express');
 const bodyParser = require('body-parser');
 const {getClient} = require('./module/whatsapp');
@@ -12,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 app.get('/', (req, res) => {
-    res.sendFile('form.html', { root: path.join(__dirname, '..', 'public') });
+    res.sendFile('welcome.html', { root: path.join(__dirname, '..', 'public') });
 });
 
 
@@ -76,4 +75,3 @@ function showNotification(message, title) {
 }
 
 module.exports = app;
-*/
