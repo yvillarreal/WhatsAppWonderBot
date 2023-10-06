@@ -5,7 +5,7 @@ function saveScheduledMessage(dateTime, number_to, number_from, message, status,
     return new Promise((resolve, reject) => {
         const insertQuery = `INSERT INTO scheduled_messages (hour, minutes, number_to, number_from, message, status,frequency)
                              VALUES (?, ?, ?, ?, ?, ?,?)`;
-        db.run(insertQuery, [dateTime.format('h'), dateTime.format('m'), number_to, number_from, message, status,frequency], function (err) {
+        db.run(insertQuery, [dateTime.format('hh'), dateTime.format('mm'), number_to, number_from, message, status,frequency], function (err) {
             if (err) {
                 console.error('Error al guardar el mensaje programado:', err.message);
                 reject(err);

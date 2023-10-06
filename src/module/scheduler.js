@@ -49,8 +49,48 @@ async function scheduler(clientInstance) {
             } else {
                 await clientInstance.sendText(message.from, 'Formato incorrecto. Debe ser: /programar [frecuencia] [HH:mm] [dd-MM-yyyy] [numero] [mensaje]');
             }
+        } else if (lowerCaseMessage.startsWith('/editar_programado')) {
+
+            const commandParts = lowerCaseMessage.split(' ');
+
+            if (commandParts.length === 4) {
+                const idToEdit = parseInt(commandParts[1]); // ID del mensaje a editar
+                const newHour = commandParts[2]; // Nueva hora (HH:mm)
+                const newMinutes = commandParts[3]; // Nuevos minutos (MM)
+
+                if (!isNaN(idToEdit) && moment(newHour, 'HH:mm', true).isValid() && moment(newMinutes, 'mm', true).isValid()) {
+                    data.editScheduledMessage(idToEdit, newHour, newMinutes, message.body)
+                        .then(async () => {
+                            await clientInstance.sendText(message.from, `Mensaje programado con ID ${idToEdit} ha sido editado.`);
+                        })
+                        .catch((error) => {
+                            console.error('Error al editar el mensaje programado:', error);
+                        });
+                } else {
+                    await clientInstance.sendText(message.from, 'Formato incorrecto. Debe ser: /editar [ID] [HH:mm] [mm]');
+                }
+            } else {
+                await clientInstance.sendText(message.from, 'Formato incorrecto. Debe ser: /editar [ID] [HH:mm] [mm]');
+            }
+
         } else if (lowerCaseMessage.includes('/ver_programados')) {
             loadScheduledMessages(clientInstance, message);
+
+        } else if (lowerCaseMessage.startsWith('/eliminar_programado')) {
+            // Comando para eliminar un mensaje programado por ID
+            const commandParts = lowerCaseMessage.split(' ');
+
+            if (commandParts.length === 2) {
+                const messageId = parseInt(commandParts[1]);
+                if (!isNaN(messageId)) {
+                    data.deleteScheduledMessage(messageId);
+                    await clientInstance.sendText(message.from, `Mensaje con ID ${messageId} ha sido eliminado.`);
+                } else {
+                    await clientInstance.sendText(message.from, 'El ID del mensaje programado debe ser un número válido.');
+                }
+            } else {
+                await clientInstance.sendText(message.from, 'Formato incorrecto. Debe ser: /eliminar_programado [ID]');
+            }
         }
     });
 }
