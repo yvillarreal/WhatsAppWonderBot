@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 
 
 app.get('/schedule', (req, res) => {
-    res.sendFile('schedule.html', { root: path.join(__dirname, '..', 'public') });
+    res.sendFile('schedule-message.html', { root: path.join(__dirname, '..', 'public') });
 });
 
 

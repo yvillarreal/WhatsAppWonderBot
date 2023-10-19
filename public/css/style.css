@@ -1,19 +1,50 @@
-/* Estilos para el héroe centrado */
-.hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 80vh;
-    text-align: center;
-    background-color: #f0f0f0; /* Cambia el color de fondo según tus preferencias */
+/* Estilo para la barra de navegación */
+.navbar {
+    background-color: #673AB7; /* Morado */
 }
 
+.navbar .brand-logo {
+    margin-left: 20px; /* Ajusta el margen a tu preferencia */
+}
+
+/* Estilo para el título */
 .hero h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
+    font-family: 'Lato', sans-serif;
+    color: #512DA8; /* Tono más claro de morado */
+    font-size: 2.5rem; /* Ajusta el tamaño a tu preferencia */
 }
 
-.hero p {
-    font-size: 18px;
+/* Estilo para el párrafo */
+p {
+    font-family: 'Lato', sans-serif;
+    color: #333; /* Color de texto predeterminado */
+}
+
+/* Estilo para los botones */
+.btn {
+    background-color: #673AB7; /* Morado */
+}
+
+.btn:hover {
+    background-color: #512DA8; /* Color de botón al pasar el mouse */
+}
+
+/* Agrega sombra al componente hero */
+.hero {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+    margin-top: 40px !important; /* Ajusta este valor según tus preferencias */
+}
+/* Clases de Materialize CSS para tamaños de texto responsivos */
+@media only screen and (max-width: 600px) {
+    h1 {
+        font-size: 2rem; /* Tamaño para pantallas pequeñas */
+    }
+}
+
+@media only screen and (min-width: 601px) {
+    h1 {
+        font-size: 3rem; /* Tamaño para pantallas medianas y grandes */
+    }
 }

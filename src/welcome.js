@@ -15,9 +15,15 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/schedule', (req, res) => {
-    res.sendFile('schedule.html', { root: path.join(__dirname, '..', 'public') });
+app.get('/schedule-message', (req, res) => {
+    res.sendFile('schedule-message.html', { root: path.join(__dirname, '..', 'public') });
 });
+
+app.get('/about', (req, res) => {
+    res.sendFile('about.html', { root: path.join(__dirname, '..', 'public') });
+});
+
+
 
 
 app.post('/schedule', async (req, res) => {

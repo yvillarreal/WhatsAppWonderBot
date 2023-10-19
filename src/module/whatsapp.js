@@ -4,6 +4,7 @@ const {scheduler} = require('./scheduler');
 const {getMediaFromHost} = require('./media')
 const fs = require('fs');
 
+
 // Carga el archivo de palabras clave y mensajes de bienvenida
 const welcomeMessagesData = fs.readFileSync('./data/welcome_messages.json');
 const welcomeMessages = JSON.parse(welcomeMessagesData);
