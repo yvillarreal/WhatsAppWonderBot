@@ -1,26 +1,6 @@
 const cron = require('node-cron');
 const notifier = require("node-notifier");
-const {appIndex} = require("welcome");
 const {getClient} = require("./module/whatsapp");
-
-appIndex.post('/send', async (req, res) => {
-    const {from, to, hour, minutes, date, message} = req.body;
-
-    const result = scheduleMessage(Number(from), Number(to), Number(hour), Number(minutes), new Date(date), message);
-
-    const successMessage = `Mensaje programado a ${to}: ${message}`;
-    showNotification(successMessage, 'Éxito');
-
-    // Limpiar los campos del formulario después de enviar
-    req.body.from = '';
-    req.body.to = '';
-    req.body.hour = '';
-    req.body.minutes = '';
-    req.body.date = '';
-    req.body.message = '';
-
-    res.redirect('/');
-});
 
 function scheduleMessage(from, to, hour, minutes, date, message) {
     const isValid = validateFields(from, to, hour, minutes, date);
@@ -52,4 +32,7 @@ function showNotification(message, title) {
 function validateFields(from, to, hour, minutes, date) {
     return !(!Number.isInteger(from) || !Number.isInteger(to) || !Number.isInteger(hour) || !Number.isInteger(minutes) || isNaN(Date.parse(date)));
 }
+
+module.exports = {scheduleMessage, showNotification};
+
 
