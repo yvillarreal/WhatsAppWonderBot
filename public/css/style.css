@@ -48,3 +48,21 @@ p {
         font-size: 3rem; /* Tamaño para pantallas medianas y grandes */
     }
 }
+
+/*Schedule Message HTML*/
+/* Estilo para el formulario */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Estilo para los botones */
+.btn {
+    background-color: #673AB7; /* Morado */
+}
+
+.btn:hover {
+    background-color: #512DA8; /* Color de botón al pasar el mouse */
+}

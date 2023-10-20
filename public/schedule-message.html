@@ -17,24 +17,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="/css/style.css">
     <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    <style>
-        /* Estilo para el formulario */
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        /* Estilo para los botones */
-        .btn {
-            background-color: #673AB7; /* Morado */
-        }
-
-        .btn:hover {
-            background-color: #512DA8; /* Color de botón al pasar el mouse */
-        }
-    </style>
 </head>
 <body>
 
@@ -48,8 +30,13 @@
 
 <!-- Formulario de Programar Mensaje -->
 <div class="container">
+
+    <h3 class="center-align">Programar Mensaje</h3>
+
     <div class="row">
-        <form action="/schedule" method="post" class="col s12">
+
+        <form action="/send" method="post" class="col s12">
+
             <div class="input-field">
                 <input id="busqueda" type="text" class="validate">
                 <label for="busqueda">Campo de Búsqueda</label>
@@ -61,12 +48,14 @@
             </div>
 
             <div class="input-field">
-                <input type="number" maxlength="2" id="hour" name="hour" class="validate" required oninput="validateHour(this)">
+                <input type="number" maxlength="2" id="hour" name="hour" class="validate" required
+                       oninput="validateHour(this)">
                 <label for="hour">Hora (0-23)</label>
             </div>
 
             <div class="input-field">
-                <input type="number" maxlength="2" id="minutes" name="minutes" class="validate" required oninput="validateMinutes(this)">
+                <input type="number" maxlength="2" id="minutes" name="minutes" class="validate" required
+                       oninput="validateMinutes(this)">
                 <label for="minutes">Minutos (0-59)</label>
             </div>
 
@@ -94,55 +83,13 @@
 
 </div>
 
+<div id="notification-container"></div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script>
-    // Inicializar el selector de fecha
-    document.addEventListener('DOMContentLoaded', function () {
-        const datePickers = document.querySelectorAll('.datepicker');
+<script src="/scripts/schedule-message-DOM.js"></script>
 
-        // Obtiene la fecha actual
-        const today = new Date();
-        let dd = today.getDate() + 1;
-        let mm = today.getMonth() + 1; // Enero es 0, así que sumamos 1
-        const yyyy = today.getFullYear();
-
-        // Formatea la fecha actual en el formato 'yyyy-mm-dd'
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-        const currentDate = yyyy + '-' + mm + '-' + dd;
-
-        M.Datepicker.init(datePickers, {
-            format: 'yyyy-mm-dd',
-            autoClose: true,
-            // Establece la fecha mínima como la fecha actual
-            minDate: new Date(currentDate)
-        });
-    });
-
-    function validateHour(input) {
-        const value = input.value;
-        if (isNaN(value) || value < 0 || value > 23) {
-            input.setCustomValidity("La hora debe estar en el rango de 0 a 23.");
-        } else {
-            input.setCustomValidity("");
-        }
-    }
-
-    function validateMinutes(input) {
-        const value = input.value;
-        if (isNaN(value) || value < 0 || value > 59) {
-            input.setCustomValidity("Los minutos deben estar en el rango de 0 a 59.");
-        } else {
-            input.setCustomValidity("");
-        }
-    }
-</script>
 </body>
 
 </html>

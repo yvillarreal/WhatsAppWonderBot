@@ -1,21 +1,21 @@
 const express = require('express');
+const appIndex = express();
 const bodyParser = require('body-parser');
 const path = require('path');
+const notifier = require("node-notifier");
 
-const app = express();
+appIndex.use(bodyParser.urlencoded({extended: true}));
 
-app.use(bodyParser.urlencoded({extended: true}));
-
-app.get('/', (req, res) => {
+appIndex.get('/', (req, res) => {
     res.sendFile('welcome.html', {root: path.join(__dirname, '..', 'public')});
 });
 
-app.get('/schedule-message', (req, res) => {
+appIndex.get('/schedule-message', (req, res) => {
     res.sendFile('schedule-message.html', {root: path.join(__dirname, '..', 'public')});
 });
 
-app.get('/about', (req, res) => {
+appIndex.get('/about', (req, res) => {
     res.sendFile('about.html', {root: path.join(__dirname, '..', 'public')});
 });
 
-module.exports = app;
+module.exports = appIndex;
