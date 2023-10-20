@@ -1,79 +1,99 @@
-<!--
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enviar Mensaje</title>
-    &lt;!&ndash; Agrega los enlaces a los archivos CSS y JavaScript de Materialize CSS &ndash;&gt;
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WhatsAppWonderBot</title>
+
+    <!-- Agrega enlaces a las bibliotecas de Materialize CSS y Material Design Lite -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-</head>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="/css/style.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+        /* Estilo para el formulario */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Estilo para los botones */
+        .btn {
+            background-color: #673AB7; /* Morado */
+        }
+
+        .btn:hover {
+            background-color: #512DA8; /* Color de botón al pasar el mouse */
+        }
+    </style>
+</head>
 <body>
 
+<!-- Barra de navegación mejorada -->
+<nav class="navbar">
+    <div class="nav-wrapper">
+        <a href="/" class="brand-logo">WhatsAppWonderBot</a>
+    </div>
+</nav>
+
+
+<!-- Formulario de Programar Mensaje -->
 <div class="container">
+    <div class="row">
+        <form action="/schedule" method="post" class="col s12">
+            <h2>Programar Mensaje</h2>
+            <div class="input-field">
+                <input id="busqueda" type="text" class="validate">
+                <label for="busqueda">Campo de Búsqueda</label>
+            </div>
 
-    <h3 class="center-align">Programar Mensaje</h3>
+            <div class="input-field">
+                <input type="number" id="to" name="to" class="validate" required>
+                <label for="to">Número a Enviar (Número)</label>
+            </div>
 
-    <form action="/schedule" method="post">
+            <div class="input-field">
+                <input type="number" maxlength="2" id="hour" name="hour" class="validate" required>
+                <label for="hour">Hora (0-23)</label>
+            </div>
 
-        <div class="input-field">
-            <input type="number" id="from" name="from" class="validate" required>
-            <label for="from">De (Número)</label>
-        </div>
+            <div class="input-field">
+                <input type="number" maxlength="2" id="minutes" name="minutes" class="validate" required>
+                <label for="minutes">Minutos (0-59)</label>
+            </div>
 
-        <div class="input-field">
-            <input type="number" id="to" name="to" class="validate" required>
-            <label for="to">Número a Enviar (Número)</label>
-        </div>
+            <div class="input-field">
+                <input type="date" id="date" name="date" class="datepicker" required>
+                <label for="date">Fecha</label>
+            </div>
 
-        <div class="input-field">
-            <input type="number" id="hour" name="hour" class="validate" required>
-            <label for="hour">Hora (0-23)</label>
-        </div>
+            <div class="input-field">
+                <textarea id="message" name="message" class="materialize-textarea" maxlength="500" required></textarea>
+                <label for="message">Mensaje (Máximo 500 caracteres)</label>
+            </div>
 
-        <div class="input-field">
-            <input type="number" id="minutes" name="minutes" class="validate" required>
-            <label for="minutes">Minutos (0-59)</label>
-        </div>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Programar
+                <i class="material-icons right">schedule</i>
+            </button>
 
-        <div class="input-field">
-            <input type="date" id="date" name="date" class="datepicker" required>
-            <label for="date">Fecha</label>
-        </div>
+            <a href="/" class="btn waves-effect waves-light">Regresar</a>
 
-        <div class="input-field">
-            <textarea id="message" name="message" class="materialize-textarea" maxlength="500" required></textarea>
-            <label for="message">Mensaje (Máximo 500 caracteres)</label>
-        </div>
+        </form>
 
-        <button class="btn waves-effect waves-light" type="submit" name="action">Programar
-            <i class="material-icons right">schedule</i>
-        </button>
-
-        <a href="/" class="btn waves-effect waves-light">Regresar</a>
-
-    </form>
+    </div>
 
 </div>
 
-<div id="notification-container"></div>
-
-&lt;!&ndash; Agrega los enlaces a los archivos JavaScript de Materialize CSS &ndash;&gt;
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script>
-    // Inicializar el selector de fecha
-    document.addEventListener('DOMContentLoaded', function () {
-        var datePickers = document.querySelectorAll('.datepicker');
-        M.Datepicker.init(datePickers, {
-            format: 'yyyy-mm-dd',
-            autoClose: true
-        });
-    });
-</script>
 </body>
+
 </html>
--->
+
