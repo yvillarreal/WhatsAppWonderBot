@@ -7,18 +7,19 @@ const db = new sqlite3.Database('./data/messages.db', (err) => {
     } else {
         console.log('Base de datos SQLite abierta correctamente.');
         // Crea la tabla si no existe
-        db.run(`CREATE TABLE IF NOT EXISTS scheduled_messages
+        db.run(`CREATE TABLE if not exists scheduled_messages
                 (
                     id          INTEGER PRIMARY KEY AUTOINCREMENT,
                     hour        INTEGER NOT NULL,
                     minutes     INTEGER NOT NULL,
-                    date        date    not null,
                     number_to   TEXT    NOT NULL,
                     number_from TEXT    NOT NULL,
                     message     TEXT    NOT NULL,
                     status      TEXT    NOT NULL,
-                    frequency   TEXT
-                )`);
+                    frequency   TEXT,
+                    source      TEXT    NOT NULL
+                );
+        `);
     }
 });
 

@@ -4,13 +4,14 @@ const {getClient} = require("./module/whatsapp");
 const moment = require('moment');
 const data = require("./module/database");
 
-function scheduleMessage(from, to, hour, minutes, date, message) {
+function schedule_web(from, to, hour, minutes, date, message) {
     const isValid = validateFields(from, to, hour, minutes, date);
     if (!isValid) {
         return 'Los campos del formulario no son válidos.';
     }
 
     const client = getClient();
+    from = '50578661942';
 
     // Combina la fecha, hora y minutos en un solo formato de cadena
     const dateTimeString = `${date} ${hour}:${minutes}`;
@@ -18,12 +19,14 @@ function scheduleMessage(from, to, hour, minutes, date, message) {
 
     const cronExpression = `${minutes} ${hour} ${date.getDate() + 1} ${date.getMonth() + 1} *`;
 
-    data.saveScheduledMessage(dateTime, to, client._hostAccountNumber, message, 'programado', "daily")
+    data.saveScheduledMessage(dateTime, to, client._hostAccountNumber, message, 'programado', '', 'web')
         .then(async id => {
+            console.log(`${to.toString()}@c.us`)
+            console.log(`${from.toString()}@c.us`)
             cron.schedule(cronExpression, async () => {
                 try {
-                    await client.sendText(`${to}@c.us`, message);
-                    await client.sendText(`${from}@c.us`, `✅ *Mensaje Programado Enviado Exitosamente* ✅\n\nNúmero Destino: *${to}*\nMensaje: *${message}* 🚀`);
+                    await client.sendText(`${to.toString()}@c.us`, message);
+                    await client.sendText(`${from.toString()}@c.us`, `✅ *Mensaje Programado Enviado Exitosamente* ✅\n\nNúmero Destino: *${to}*\nMensaje: *${message}* \n\n🚀`);
                 } catch (error) {
                     console.error('Error al enviar el mensaje programado:', error);
                 }
@@ -47,6 +50,6 @@ function validateFields(from, to, hour, minutes, date) {
     return !(!Number.isInteger(to) || !Number.isInteger(hour) || !Number.isInteger(minutes) || isNaN(Date.parse(date)));
 }
 
-module.exports = {scheduleMessage, showNotification};
+module.exports = {scheduleMessage: schedule_web, showNotification};
 
 

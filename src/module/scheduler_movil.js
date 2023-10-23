@@ -2,7 +2,7 @@ const cron = require("node-cron");
 const moment = require('moment');
 const data = require("./database");
 
-async function scheduler(clientInstance) {
+async function scheduler_movil(clientInstance) {
     clientInstance.onMessage(async (message) => {
         const lowerCaseMessage = message.body.toLowerCase();
 
@@ -33,7 +33,7 @@ async function scheduler(clientInstance) {
                     const frequencyExpression = getFrequencyExpression(frequency);
                     const cronExpression = `${dateTime.format('m')} ${dateTime.format('h')} ${frequencyExpression} * *`;
 
-                    data.saveScheduledMessage(dateTime, numberTo, clientInstance._hostAccountNumber, userMessage, 'programado', frequency)
+                    data.saveScheduledMessage(dateTime, numberTo, clientInstance._hostAccountNumber, userMessage, 'programado', frequency, Enum.Source.MOVIL)
                         .then(async id => {
                             const responseSchedule = `Mensaje programado para el ${dateTime.format('DD-MM-YYYY [a las] HH:mm')}:\n*Mensaje*: ${userMessage}\n*Número a enviar:* ${numberTo}\n*Frecuencia:* ${frequency}`;
                             scheduleMessage(clientInstance, numberTo, userMessage, cronExpression);
@@ -140,4 +140,4 @@ async function loadScheduledMessages(clientInstance, message) {
     });
 }
 
-module.exports = {scheduler};
+module.exports = {scheduler: scheduler_movil};

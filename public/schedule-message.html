@@ -35,16 +35,21 @@
 
         <h3 class="center-align">Programar Mensaje</h3>
 
+        <!-- Agregar un formulario para ingresar el término de búsqueda -->
+        <form id="searchForm">
+            <input type="text" id="searchTerm" placeholder="Nombre a buscar">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <!-- Agregar un área para mostrar los resultados -->
+        <div id="searchResults"></div>
+
+
         <form action="/send" method="post" class="col s12">
 
-        <div class="input-field">
-                <input id="busqueda" type="text" class="validate">
-                <label for="busqueda">Campo de Búsqueda</label>
-            </div>
-
             <div class="input-field">
-                <input type="number" id="to" name="to" class="validate" required>
-                <label for="to">Número a Enviar (Número)</label>
+                <input type="text" id="to" name="to" class="validate" required>
+                <label for="to">Número a Enviar (505xxxxxxxx)</label>
             </div>
 
             <div class="input-field">
@@ -89,6 +94,41 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="/scripts/schedule-message-DOM.js"></script>
+<script>
+    // Escuchar el evento de envío del formulario
+    $(document).ready(function() {
+        $('#searchForm').submit(function(event) {
+            event.preventDefault();
+
+            const searchTerm = $('#searchTerm').val();
+
+            // Realizar una solicitud AJAX al servidor
+            $.ajax({
+                type: 'POST',
+                url: '/search-contact', // Ruta en el servidor para la búsqueda de contacto
+                data: { searchTerm: searchTerm },
+                success: function(data) {
+                    // Manipular los resultados y mostrarlos en el área de resultados
+                    const resultsArea = $('#searchResults');
+                    resultsArea.empty();
+                    if (data && data.length > 0) {
+                        const list = $('<ul>');
+                        data.forEach(function(contact) {
+                            list.append($('<li>').text(contact.name));
+                        });
+                        resultsArea.append(list);
+                    } else {
+                        resultsArea.text('No se encontraron contactos.');
+                    }
+                },
+                error: function(error) {
+                    console.error('Error en la solicitud AJAX:', error);
+                }
+            });
+        });
+    });
+</script>
+
 
 </body>
 

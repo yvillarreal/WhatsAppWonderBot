@@ -1,11 +1,25 @@
 const db = require('../../data/initialize_database');
 
 //Método para guardar los mensajes en la tabla
-function saveScheduledMessage(dateTime, number_to, number_from, message, status,frequency) {
+function saveScheduledMessage(dateTime, number_to, number_from, message, status, frequency, source) {
     return new Promise((resolve, reject) => {
-        const insertQuery = `INSERT INTO scheduled_messages (hour, minutes, number_to, number_from, message, status,frequency)
-                             VALUES (?, ?, ?, ?, ?, ?,?)`;
-        db.run(insertQuery, [dateTime.format('hh'), dateTime.format('mm'), number_to, number_from, message, status,frequency], function (err) {
+        const insertQuery = `INSERT INTO scheduled_messages (hour,
+                                                             minutes,
+                                                             number_to,
+                                                             number_from,
+                                                             message,
+                                                             status,
+                                                             frequency,
+                                                             source)
+                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        db.run(insertQuery, [dateTime.format('hh'),
+            dateTime.format('mm'),
+            number_to.toString(),
+            number_from.toString(),
+            message,
+            status,
+            frequency,
+            source], function (err) {
             if (err) {
                 console.error('Error al guardar el mensaje programado:', err.message);
                 reject(err);
@@ -74,11 +88,6 @@ function loadPendingMessages(callback) {
 }
 
 
-
 module.exports = {
-    saveScheduledMessage,
-    updateScheduleMessage,
-    loadPendingMessages,
-    editScheduledMessage,
-    deleteScheduledMessage
+    saveScheduledMessage, updateScheduleMessage, loadPendingMessages, editScheduledMessage, deleteScheduledMessage
 };

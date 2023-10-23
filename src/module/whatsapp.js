@@ -1,7 +1,6 @@
 const {create, Client} = require('@open-wa/wa-automate');
 const {handleCommands} = require('./commands');
-const {scheduler} = require('./scheduler');
-const {getMediaFromHost} = require('./media')
+const {scheduler} = require('./scheduler_movil');
 const fs = require('fs');
 
 
@@ -12,13 +11,11 @@ const welcomeMessages = JSON.parse(welcomeMessagesData);
 let clientInstance;
 
 async function startWhatsApp() {
-    clientInstance = await create({sessionId: 'my-session'});
+    clientInstance = await create({sessionId: 'wonderBot'});
     console.log("Cargando módulo de comandos.")
     handleCommands(clientInstance);
     console.log("Cargando módulo de scheduler.")
     scheduler(clientInstance);
-    console.log("Cargando recursos multimedia.")
-    getMediaFromHost(clientInstance, 'media');
     console.log('🚀 WhatsAppWonderBot está listo. 🚀');
 
     // Configura un mensaje de bienvenida
