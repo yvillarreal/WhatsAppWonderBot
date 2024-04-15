@@ -11,7 +11,7 @@ function schedule_web(from, to, hour, minutes, date, message) {
     }
 
     const client = getClient();
-    from = '50578661942';
+    from = '505123456789';
 
     // Combina la fecha, hora y minutos en un solo formato de cadena
     const dateTimeString = `${date} ${hour}:${minutes}`;
